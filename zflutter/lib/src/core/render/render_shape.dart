@@ -252,4 +252,9 @@ class RenderZShape extends RenderZBox {
   }
 
   void render(ZRenderer renderer) {}
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    return constraints.biggest;
+  }
 }
