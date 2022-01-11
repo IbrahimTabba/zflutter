@@ -6,7 +6,7 @@ import 'core.dart';
 // TODO: This Paths needs to be immutable;
 
 abstract class ZPathCommand {
-  final ZVector endRenderPoint = ZVector.zero;
+  final ZVector? endRenderPoint = ZVector.zero;
 
   void reset();
 
@@ -14,24 +14,24 @@ abstract class ZPathCommand {
 
   void render(ZRenderer renderer);
 
-  ZVector point({index = 0});
+  ZVector? point({index = 0});
 
-  ZVector renderPoint({int index = 0});
+  ZVector? renderPoint({int index = 0});
 
-  set previous(ZVector previousPoint) {}
+  set previous(ZVector? previousPoint) {}
 
   ZPathCommand clone();
 }
 
 class ZMove extends ZPathCommand {
-  ZVector _point;
+  ZVector? _point;
 
-  ZVector _renderPoint;
+  ZVector? _renderPoint;
 
-  ZVector get endRenderPoint => _renderPoint;
+  ZVector? get endRenderPoint => _renderPoint;
 
-  ZMove.vector(this._point) {
-    _renderPoint = _point.copy();
+  ZMove.vector(ZVector this._point) {
+    _renderPoint = _point!.copy();
   }
 
   ZMove(double x, double y, double z) {
@@ -47,35 +47,35 @@ class ZMove extends ZPathCommand {
   }
 
   ZPathCommand transform(ZVector translation, ZVector rotate, ZVector scale) {
-    return ZMove.vector(_renderPoint.transform(translation, rotate, scale));
+    return ZMove.vector(_renderPoint!.transform(translation, rotate, scale));
   }
 
   void render(ZRenderer renderer) {
-    renderer.move(_renderPoint);
+    renderer.move(_renderPoint!);
   }
 
-  ZVector point({index = 0}) {
+  ZVector? point({index = 0}) {
     return _point;
   }
 
-  ZVector renderPoint({index = 0}) {
+  ZVector? renderPoint({index = 0}) {
     return _renderPoint;
   }
 
   ZPathCommand clone() {
-    return ZMove.vector(this.point());
+    return ZMove.vector(this.point()!);
   }
 }
 
 class ZLine extends ZPathCommand {
-  ZVector _point;
+  ZVector? _point;
 
-  ZVector _renderPoint;
+  ZVector? _renderPoint;
 
-  ZVector get endRenderPoint => _renderPoint;
+  ZVector? get endRenderPoint => _renderPoint;
 
-  ZLine.vector(this._point) {
-    _renderPoint = _point.copy();
+  ZLine.vector(ZVector this._point) {
+    _renderPoint = _point!.copy();
   }
 
   ZLine(double x, double y, double z) {
@@ -91,30 +91,30 @@ class ZLine extends ZPathCommand {
   }
 
   ZPathCommand transform(ZVector translation, ZVector rotate, ZVector scale) {
-    return ZLine.vector(_renderPoint.transform(translation, rotate, scale));
+    return ZLine.vector(_renderPoint!.transform(translation, rotate, scale));
   }
 
   void render(ZRenderer renderer) {
-    renderer.line(_renderPoint);
+    renderer.line(_renderPoint!);
   }
 
-  ZVector point({index = 0}) {
+  ZVector? point({index = 0}) {
     return _point;
   }
 
-  ZVector renderPoint({index = 0}) {
+  ZVector? renderPoint({index = 0}) {
     return _renderPoint;
   }
 
   ZPathCommand clone() {
-    return ZLine.vector(_point);
+    return ZLine.vector(_point!);
   }
 }
 
 class ZBezier extends ZPathCommand {
   List<ZVector> points;
 
-  List<ZVector> renderPoints;
+  late List<ZVector> renderPoints;
 
   ZVector get endRenderPoint => renderPoints.last;
 
@@ -154,10 +154,10 @@ class ZBezier extends ZPathCommand {
 const double _arcHandleLength = 9 / 16;
 
 class ZArc extends ZPathCommand {
-  List<ZVector> points;
-  ZVector _previous = ZVector.zero;
+  late List<ZVector> points;
+  ZVector? _previous = ZVector.zero;
 
-  List<ZVector> renderPoints;
+  late List<ZVector> renderPoints;
 
   ZVector get endRenderPoint => renderPoints.last;
 
@@ -165,7 +165,7 @@ class ZArc extends ZPathCommand {
     renderPoints = points.map((e) => e.copy()).toList();
   }
 
-  ZArc({@required ZVector corner, @required ZVector end, ZVector previous})
+  ZArc({required ZVector corner, required ZVector end, ZVector? previous})
       : assert(corner != null && end != null,
             'Corner and end points can\'t be null') {
     _previous = previous;
@@ -189,7 +189,7 @@ class ZArc extends ZPathCommand {
 
   void render(ZRenderer renderer) {
     assert(_previous != null);
-    var prev = _previous;
+    var prev = _previous!;
     var corner = renderPoints[0];
     var end = renderPoints[1];
     var a = ZVector.lerp(prev, corner, _arcHandleLength);
@@ -206,7 +206,7 @@ class ZArc extends ZPathCommand {
   }
 
   @override
-  set previous(ZVector previousPoint) {
+  set previous(ZVector? previousPoint) {
     assert(previousPoint != null);
     _previous = previousPoint;
   }

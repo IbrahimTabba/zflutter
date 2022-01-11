@@ -7,22 +7,22 @@ import 'package:zflutter/src/widgets/group.dart';
 import 'package:zflutter/zflutter.dart';
 
 class ZBox extends StatelessWidget {
-  final double width;
-  final double height;
-  final double depth;
+  final double? width;
+  final double? height;
+  final double? depth;
 
   final double stroke;
   final bool fill;
 
-  final Color color;
-  final bool visible;
+  final Color? color;
+  final bool? visible;
 
-  final Color frontColor;
-  final Color rearColor;
-  final Color leftColor;
-  final Color rightColor;
-  final Color topColor;
-  final Color bottomColor;
+  final Color? frontColor;
+  final Color? rearColor;
+  final Color? leftColor;
+  final Color? rightColor;
+  final Color? topColor;
+  final Color? bottomColor;
 
   ZBox({
     this.width,
@@ -41,73 +41,73 @@ class ZBox extends StatelessWidget {
   });
 
   Widget get frontFace => ZPositioned(
-        translate: ZVector.only(z: depth / 2),
+        translate: ZVector.only(z: depth! / 2),
         child: ZRect(
           color: frontColor ?? color,
           fill: fill,
-          stroke: 1,
-          width: width,
-          height: height,
+          stroke: stroke,
+          width: width!,
+          height: height!,
         ),
       );
 
   Widget get rearFace => ZPositioned(
-        translate: ZVector.only(z: -depth / 2),
+        translate: ZVector.only(z: -depth! / 2),
         rotate: ZVector.only(y: tau / 2),
         child: ZRect(
-          width: width,
-          height: height,
+          width: width!,
+          height: height!,
           color: rearColor ?? color,
           fill: fill,
-          stroke: 1,
+          stroke: stroke,
         ),
       );
 
   Widget get leftFace => ZPositioned(
-        translate: ZVector.only(x: -width / 2),
+        translate: ZVector.only(x: -width! / 2),
         rotate: ZVector.only(y: -tau / 4),
         child: ZRect(
-          width: depth,
-          height: height,
-          stroke: 1,
+          width: depth!,
+          height: height!,
+          stroke: stroke,
           color: leftColor ?? color,
           fill: fill,
         ),
       );
 
   Widget get rightFace => ZPositioned(
-        translate: ZVector.only(x: width / 2),
+        translate: ZVector.only(x: width! / 2),
         rotate: ZVector.only(y: tau / 4),
         child: ZRect(
-          width: depth,
+          width: depth!,
           color: rightColor ?? color,
-          height: height,
-          stroke: 1,
+          height: height!,
+          stroke: stroke,
           fill: fill,
         ),
       );
 
   Widget get topFace => ZPositioned(
-        translate: ZVector.only(y: -height / 2),
+        translate: ZVector.only(y: -height! / 2),
         rotate: ZVector.only(x: -tau / 4),
         child: ZRect(
-          width: width,
+          width: width!,
           color: topColor ?? color,
-          height: depth,
-          stroke: 1,
+          height: depth!,
+          stroke: stroke,
           fill: fill,
         ),
       );
 
   Widget get bottomFace => ZPositioned(
-        translate: ZVector.only(y: height / 2),
+        translate: ZVector.only(y: height! / 2),
         rotate: ZVector.only(x: tau / 4),
         child: ZRect(
-          width: width,
+          width: width!,
           color: bottomColor ?? color,
-          stroke: 1,
+          stroke: stroke,
           fill: fill,
-          height: depth,
+          height: depth!,
         ),
       );
 
